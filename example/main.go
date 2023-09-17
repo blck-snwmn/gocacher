@@ -7,52 +7,17 @@ import (
 	"sync"
 	"time"
 
-	"github.com/blck-snwmn/gocacher/db"
+	"github.com/blck-snwmn/gocacher"
+	"github.com/blck-snwmn/gocacher/example/db"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgtype"
 	"golang.org/x/sync/singleflight"
 )
 
-type entry struct {
-	v         interface{}
-	expiredAt time.Time
-}
-
-type cache struct {
-	mu sync.Mutex
-	m  map[string]entry
-}
-
-func (c *cache) do(ctx context.Context, key string, now time.Time, fn func(key string) (interface{}, time.Time, error)) (interface{}, error) {
-	c.mu.Lock()
-	defer c.mu.Unlock()
-
-	if v, ok := c.m[key]; ok {
-		// return cached value if expiAt > now
-		if v.expiredAt.After(now) {
-			return v.v, nil
-		}
-	}
-
-	v, exp, err := fn(key)
-	if err != nil {
-		return nil, err
-	}
-	c.m[key] = entry{
-		v:         v,
-		expiredAt: exp,
-	}
-	return v, nil
-}
-
-func (c *cache) Do(ctx context.Context, key string, fn func(key string) (interface{}, time.Time, error)) (interface{}, error) {
-	return c.do(ctx, key, time.Now(), fn)
-}
-
 type AuthorRepository struct {
 	queries *db.Queries
 	sfList  *singleflight.Group
-	cache   *cache
+	cache   *gocacher.Cache
 }
 
 func (r *AuthorRepository) Lists(ctx context.Context) ([]db.Author, error) {
@@ -80,7 +45,7 @@ func newAuthorRepository(conn *pgx.Conn) (*AuthorRepository, error) {
 	return &AuthorRepository{
 		queries: db.New(conn),
 		sfList:  &singleflight.Group{},
-		cache:   &cache{m: map[string]entry{}},
+		cache:   gocacher.New(),
 	}, nil
 }
 
