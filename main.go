@@ -23,7 +23,7 @@ type cache struct {
 	m  map[string]entry
 }
 
-func (c *cache) do(ctx context.Context, key string, now time.Time, fn func() (interface{}, time.Time, error)) (interface{}, error) {
+func (c *cache) do(ctx context.Context, key string, now time.Time, fn func(key string) (interface{}, time.Time, error)) (interface{}, error) {
 	c.mu.Lock()
 	defer c.mu.Unlock()
 
@@ -34,7 +34,7 @@ func (c *cache) do(ctx context.Context, key string, now time.Time, fn func() (in
 		}
 	}
 
-	v, exp, err := fn()
+	v, exp, err := fn(key)
 	if err != nil {
 		return nil, err
 	}
@@ -45,7 +45,7 @@ func (c *cache) do(ctx context.Context, key string, now time.Time, fn func() (in
 	return v, nil
 }
 
-func (c *cache) Do(ctx context.Context, key string, fn func() (interface{}, time.Time, error)) (interface{}, error) {
+func (c *cache) Do(ctx context.Context, key string, fn func(key string) (interface{}, time.Time, error)) (interface{}, error) {
 	return c.do(ctx, key, time.Now(), fn)
 }
 
@@ -56,8 +56,8 @@ type AuthorRepository struct {
 }
 
 func (r *AuthorRepository) Lists(ctx context.Context) ([]db.Author, error) {
-	v, err := r.cache.Do(ctx, "lists", func() (interface{}, time.Time, error) {
-		v, err, _ := r.sfList.Do("lists", func() (interface{}, error) {
+	v, err := r.cache.Do(ctx, "lists", func(key string) (interface{}, time.Time, error) {
+		v, err, _ := r.sfList.Do(key, func() (interface{}, error) {
 			fmt.Println("called")
 			return r.queries.ListAuthors(ctx)
 		})
