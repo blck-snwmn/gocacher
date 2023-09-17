@@ -21,7 +21,7 @@ type AuthorRepository struct {
 }
 
 func (r *AuthorRepository) Lists(ctx context.Context) ([]db.Author, error) {
-	v, err := r.cache.Do(ctx, "lists", func(key string) (interface{}, time.Time, error) {
+	v, err := r.cache.Do("lists", func(key string) (interface{}, time.Time, error) {
 		v, err, _ := r.sfList.Do(key, func() (interface{}, error) {
 			fmt.Println("called")
 			return r.queries.ListAuthors(ctx)
