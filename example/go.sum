@@ -2,6 +2,8 @@ github.com/blck-snwmn/gocacher v0.0.0-20230917100648-e4b9a7b689f8 h1:pgWUBwcPJew
 github.com/blck-snwmn/gocacher v0.0.0-20230917100648-e4b9a7b689f8/go.mod h1:NMgvsGxRXlryQMJn2uSBdh6ikfVAgSwBGItRgGDPSGQ=
 github.com/blck-snwmn/gocacher v0.0.0-20230917101441-5684b3ebb34a h1:bTtrUzdYXDkZdtfVktTRvufAi/RfKMa1tY87JHp6gR0=
 github.com/blck-snwmn/gocacher v0.0.0-20230917101441-5684b3ebb34a/go.mod h1:9VPyU89E0bevIRChxBY5K1TrFtutSOIjkUhjTZGKAF4=
+github.com/blck-snwmn/gocacher v0.0.0-20230917171450-64bf720eee45 h1:1/+YpLq1S6oV94fkSU8bQF3Oe0omMnvwNYu7XKqanhk=
+github.com/blck-snwmn/gocacher v0.0.0-20230917171450-64bf720eee45/go.mod h1:9VPyU89E0bevIRChxBY5K1TrFtutSOIjkUhjTZGKAF4=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/jackc/pgpassfile v1.0.0 h1:/6Hmqy13Ss2zCq62VdNG8tM1wchn8zjSGOBJ6icpsIM=
 github.com/jackc/pgpassfile v1.0.0/go.mod h1:CEx0iS5ambNFdcRtxPj5JhEz+xB6uRky5eyVu/W2HEg=
