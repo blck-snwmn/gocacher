@@ -71,24 +71,22 @@ func main() {
 	var sg sync.WaitGroup
 	for i := 0; i < 10; i++ {
 		sg.Add(1)
-		go func() {
+		go func(i int) {
 			log.Println("start")
 			defer sg.Done()
 
-			_, err := repo.Lists(ctx)
+			authors, err := repo.Lists(ctx)
 			if err != nil {
 				log.Fatalf("failed to list authors: %v", err)
 			}
-		}()
+			if i != 0 {
+				return
+			}
+			for _, author := range authors {
+				fmt.Println(author)
+			}
+		}(i)
 	}
 	sg.Wait()
 	log.Println("done")
-
-	authors, err := repo.Lists(ctx)
-	if err != nil {
-		log.Fatalf("failed to list authors: %v", err)
-	}
-	for _, author := range authors {
-		fmt.Println(author)
-	}
 }
