@@ -130,6 +130,7 @@ func main() {
 		}(i)
 	}
 	sg.Wait()
+
 	log.Println("===done===")
 
 	_, err = repo.Create(ctx, "name-99", "bio-99")
@@ -145,6 +146,7 @@ func main() {
 	}
 
 	log.Println("===done===")
+
 	time.Sleep(5 * time.Second)
 
 	authors, err = repo.Lists(ctx)
