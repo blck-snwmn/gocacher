@@ -1,7 +1,6 @@
 package gocacher
 
 import (
-	"context"
 	"sync"
 	"time"
 )
@@ -23,7 +22,7 @@ func New() *Cache {
 	}
 }
 
-func (c *Cache) do(ctx context.Context, key string, now time.Time, fn func(key string) (interface{}, time.Time, error)) (interface{}, error) {
+func (c *Cache) do(key string, now time.Time, fn func(key string) (interface{}, time.Time, error)) (interface{}, error) {
 	c.mu.Lock()
 
 	if v, ok := c.m[key]; ok {
@@ -52,6 +51,6 @@ func (c *Cache) do(ctx context.Context, key string, now time.Time, fn func(key s
 	return v, nil
 }
 
-func (c *Cache) Do(ctx context.Context, key string, fn func(key string) (interface{}, time.Time, error)) (interface{}, error) {
-	return c.do(ctx, key, time.Now(), fn)
+func (c *Cache) Do(key string, fn func(key string) (interface{}, time.Time, error)) (interface{}, error) {
+	return c.do(key, time.Now(), fn)
 }
