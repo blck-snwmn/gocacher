@@ -132,7 +132,7 @@ func main() {
 	sg.Wait()
 	log.Println("===done===")
 
-	_, err = repo.Create(ctx, "name", "bio")
+	_, err = repo.Create(ctx, "name-99", "bio-99")
 	if err != nil {
 		log.Fatalf("failed to create author: %v", err)
 	}
