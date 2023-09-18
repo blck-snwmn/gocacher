@@ -2,6 +2,7 @@ package gocacher
 
 import (
 	"errors"
+	"fmt"
 	"sync"
 	"sync/atomic"
 	"testing"
@@ -128,5 +129,41 @@ func TestCacheDo_UseCache_parallel(t *testing.T) {
 
 	if calls != 1 {
 		t.Errorf("Do count = %v; want 1", calls)
+	}
+}
+
+func TestCacheDo_UseNoCache_differentKey(t *testing.T) {
+	c := New()
+
+	loop := 100
+
+	var calls int64
+	ch := make(chan struct{})
+	f := func(key string) (interface{}, time.Time, error) {
+		atomic.AddInt64(&calls, 1)
+		<-ch
+		return "bar", time.Now().Add(time.Minute), nil
+	}
+	var sg sync.WaitGroup
+	for i := 0; i < loop; i++ {
+		sg.Add(1)
+		go func(i int) {
+			defer sg.Done()
+
+			v, err := c.Do(fmt.Sprintf("key-%d", i), f)
+			if err != nil {
+				t.Errorf("Do error = %v", err)
+			}
+			if got, want := v.(string), "bar"; got != want {
+				t.Errorf("Do = %v; want %v", got, want)
+			}
+		}(i)
+	}
+
+	close(ch)
+	sg.Wait()
+
+	if calls != int64(loop) {
+		t.Errorf("Do count = %v; want %d", calls, loop)
 	}
 }
