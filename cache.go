@@ -64,6 +64,5 @@ func (c *Cache) do(key string, now time.Time, fn func(key string) (interface{}, 
 }
 
 func (c *Cache) Do(key string, fn func(key string) (interface{}, time.Time, error)) (interface{}, error) {
-	v, err := c.do(key, time.Now(), fn)
-	return v, err
+	return c.do(key, time.Now(), fn)
 }
