@@ -4,7 +4,7 @@ go 1.21.0
 
 require (
 	github.com/blck-snwmn/gocacher v0.0.0-20230918125356-80e53bbf3617
-	github.com/jackc/pgx/v5 v5.4.3
+	github.com/jackc/pgx/v5 v5.5.4
 	golang.org/x/sync v0.3.0
 )
 
